@@ -56,4 +56,44 @@
 - Maven
 - PostgreSQL
 
+# Примеры запросов к API
 
+## Создание пользователя
+
+- **Endpoint**: `POST /v1/ancillary/addUser`
+- **Пример тела запроса**:
+  ```json
+  {
+    "login": "adm3",
+    "password": "11235584",
+    "balance": "100",
+    "phoneNumber": "123",
+    "email": "1h3"
+  }
+  ## Обновление данных пользователя
+
+- **Endpoint**: `POST /v1/user/transfer`
+- **Пример тела запроса**:
+  ```json
+  {
+    "firstName": "sth",
+    "secondName": "sth",
+    "surName": "sth"
+  }
+## Перевод денег
+
+- **Endpoint**: `POST /v1/user/transfer`
+- **Пример тела запроса**:
+  ```json
+  {
+    "loginOfUserToTransfer": "adm1",
+    "quantity": "20"
+  }
+  ## Поиск пользователей
+
+- **Endpoint**: `GET /v1/ancillary/search`
+- **Пример тела запроса**:
+  ```json
+  {
+    "fullName": ""
+  }
