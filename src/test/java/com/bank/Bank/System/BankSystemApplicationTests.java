@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +45,7 @@ class BankSystemApplicationTests {
 		}
 
 		@Test
-		public void testTransferMoneyTo_Success() {
+		public void testTransferMoneyTo_Success() throws ChangeSetPersister.NotFoundException {
 			MoneyTransferDTO dto = new MoneyTransferDTO();
 			dto.setLoginOfUserToTransfer("user2");
 			dto.setQuantity(100);
@@ -64,7 +65,7 @@ class BankSystemApplicationTests {
 		}
 
 		@Test
-		public void testTransferMoneyTo_InsufficientFunds() {
+		public void testTransferMoneyTo_InsufficientFunds() throws ChangeSetPersister.NotFoundException {
 			MoneyTransferDTO dto = new MoneyTransferDTO();
 			dto.setLoginOfUserToTransfer("user2");
 			dto.setQuantity(1100);
@@ -79,7 +80,7 @@ class BankSystemApplicationTests {
 		}
 
 		@Test
-		public void testTransferMoneyTo_UserNotFound() {
+		public void testTransferMoneyTo_UserNotFound() throws ChangeSetPersister.NotFoundException {
 			MoneyTransferDTO dto = new MoneyTransferDTO();
 			dto.setLoginOfUserToTransfer("user3");
 			dto.setQuantity(100);

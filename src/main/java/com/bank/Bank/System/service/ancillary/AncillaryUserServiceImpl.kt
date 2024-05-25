@@ -10,9 +10,12 @@ import jakarta.servlet.http.HttpServletResponse
 import lombok.SneakyThrows
 import lombok.extern.log4j.Log4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.rmi.NotBoundException
+import kotlin.jvm.Throws
 
 @Service
 @Log4j
@@ -22,7 +25,8 @@ class AncillaryUserServiceImpl : AncillaryUserService {
 
     @Autowired
     var jwtProvider: JWTProvider? = null
-    override fun createNewAccount(userDTO: UserDTO, httpServletResponse: HttpServletResponse): HttpStatus {
+    @Throws(NotFoundException::class)
+    override fun createNewAccount(userDTO: UserDTO, httpServletResponse: HttpServletResponse):  HttpStatus{
         if (isDataValid(userDTO)) {
             val userAccount = UserAccount()
             userAccount.balance = userDTO.balance
@@ -36,7 +40,8 @@ class AncillaryUserServiceImpl : AncillaryUserService {
             addTokenToCookie(accessToken, httpServletResponse)
             return HttpStatus.CREATED
         }
-        return HttpStatus.BAD_REQUEST
+        throw NotFoundException();
+        return HttpStatus.CREATED
     }
 
     override fun searchForUser(searchByDTO: SearchByDTO): UserAccount? {

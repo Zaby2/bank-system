@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -79,13 +80,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
    @Transactional
-    public HttpStatus transferMoneyTo(MoneyTransferDTO moneyTransferDTO, String token) {
+    public HttpStatus transferMoneyTo(MoneyTransferDTO moneyTransferDTO, String token) throws ChangeSetPersister.NotFoundException {
         UserAccount userAccountByLogin = accountRepository.findUserAccountByLogin(jwtProvider.getUserNameFromToken(token));
         if(userAccountByLogin.getBalance() - moneyTransferDTO.getQuantity() < 0) {
-            return HttpStatus.FORBIDDEN;
+            throw new ChangeSetPersister.NotFoundException();
         }
         UserAccount userToTransfer = accountRepository.findUserAccountByLogin(moneyTransferDTO.getLoginOfUserToTransfer());
         if(userToTransfer == null) {
+
             return HttpStatus.BAD_REQUEST;
         }
         userAccountByLogin.setBalance(userAccountByLogin.getBalance() - moneyTransferDTO.getQuantity());
